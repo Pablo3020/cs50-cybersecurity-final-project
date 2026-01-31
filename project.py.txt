@@ -1,0 +1,58 @@
+import re
+
+def main():
+    print("=== أداة فحص قوة كلمة المرور ===")
+    password = input("من فضلك أدخل كلمة المرور لفحصها: ")
+    
+    strength, feedback = check_password_strength(password)
+    
+    print(f"\nالنتيجة: {strength}")
+    if feedback:
+        print("نصائح للتحسين:")
+        for tip in feedback:
+            print(f"- {tip}")
+
+def check_password_strength(password):
+    score = 0
+    feedback = []
+    
+    # 1. فحص الطول (أكثر من 8 أحرف)
+    if len(password) >= 8:
+        score += 1
+    else:
+        feedback.append("كلمة المرور قصيرة جداً (يجب أن تكون 8 أحرف أو أكثر).")
+        
+    # 2. فحص وجود أرقام
+    if re.search(r"[0-9]", password):
+        score += 1
+    else:
+        feedback.append("يجب أن تحتوي على أرقام (0-9).")
+        
+    # 3. فحص وجود حروف صغيرة
+    if re.search(r"[a-z]", password):
+        score += 1
+    else:
+        feedback.append("يجب أن تحتوي على حروف صغيرة (a-z).")
+        
+    # 4. فحص وجود حروف كبيرة
+    if re.search(r"[A-Z]", password):
+        score += 1
+    else:
+        feedback.append("يجب أن تحتوي على حروف كبيرة (A-Z).")
+        
+    # 5. فحص وجود رموز خاصة
+    if re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        score += 1
+    else:
+        feedback.append("يجب أن تحتوي على رموز خاصة (مثل @, #, $, !).")
+    
+    # تحديد النتيجة النهائية
+    if score == 5:
+        return "قوية جداً ✅", []
+    elif score >= 3:
+        return "متوسطة ⚠️", feedback
+    else:
+        return "ضعيفة ❌", feedback
+
+if __name__ == "__main__":
+    main()
